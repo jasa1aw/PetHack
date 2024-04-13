@@ -4,8 +4,6 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import {LogIn, authorize } from '@/app/store/slices/authSlice';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 export default function UserLogin() {
     // const isAuth = useSelector((state) => state.auth.isAuth)
@@ -20,7 +18,6 @@ export default function UserLogin() {
     const login = () => {
         if(email !== e || password !== p){
             setError(true)
-            // toast.error('Неверный логин или пароль');
         }else{
             router.push('/registration')
         }

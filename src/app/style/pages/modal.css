@@ -1,0 +1,49 @@
+.modalBackground{
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, .5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3;
+}
+.modalInner{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 375px;
+    height: 274px;
+    border-radius: 32px;
+    padding: 32px;
+    background-color: #fff;
+}
+.modalInner h4{
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 24px;
+}
+.modalInner p{
+    font-size: 16px;
+    font-weight: 500;
+    color: #767676;
+    margin-bottom: 24px;
+}
+
+.modalInner button{
+    background-color: transparent;
+    color: #292929;
+    transition: .3s;
+    margin-bottom: 8px;
+    font-size: 16px;
+    font-weight: 500;
+}
+.modalInner button:hover{
+    background-color: #292929;
+    color: #fff;
+}
