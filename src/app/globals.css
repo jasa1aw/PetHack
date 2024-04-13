@@ -1,5 +1,6 @@
 @import url(style/vendor/reset.css);
 @import url(style/vendor/base.css);
 @import url(style/pages/login.css);
+@import url(style/pages/reg.css);
 @import url(style/pages/main.css);
 @import url(style/pages/modal.css);

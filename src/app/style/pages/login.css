@@ -70,8 +70,7 @@
     padding: 15px 16px;
     position: absolute;
     top: -225px;
-    opacity: 0;
-    transition: opacity 0.5s ease;
+    animation: slideToDown .5s ease .35s 1 normal both;
 }
 .loginError p{
     font-size: 16px;
@@ -81,4 +80,15 @@
 
 .loginError.show {
     opacity: 1;
+}
+
+@keyframes slideToDown{
+    from{
+        opacity: 0;
+        /* transform: translateY(-100px); */
+    }
+    to{
+        opacity: 1;
+        /* transform: translateY(0px); */
+    }
 }

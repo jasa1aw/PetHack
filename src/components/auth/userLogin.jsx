@@ -32,7 +32,7 @@ export default function UserLogin() {
                 <h3 className="h3">Твой личный репетитор</h3>
             </div>
             <div className="leftSection">
-                {error && <div className={error ? "loginError show" : "loginError"}>
+                {error && <div className='loginError'>
                     <p>Неверный логин или пароль</p>
                 </div>}
                 <h2 className="h2">Вэлком бэк!</h2>

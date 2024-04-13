@@ -1,0 +1,81 @@
+.registrationPage{
+    display: flex;
+    flex-direction: column;
+    margin: 32px 130px 100px;
+}
+.backBtn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+.backBtn p{
+    font-size: 16px;
+}
+.backIcon{
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: rgba(192, 192, 192, 0.2);
+    cursor: pointer;
+}
+.login-page2{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 90px;
+}
+.login-page2 h2{
+    text-align: center;
+    line-height: 1.5;
+}
+.login-page2 input{
+    margin-bottom: 14px;
+}
+.login-page2 button{
+    margin-top: 24px;
+    background-color: #D7D7D7;
+    font-size: 16px;
+    font-weight: 500;
+    color: #767676;
+}
+ul{
+    margin-top: 10px;
+}
+ul li{
+    font-size: 12px;
+    font-weight: 500;
+    color: #767676;
+    list-style-type: disc;
+    align-items: left;
+    margin-bottom: 10px;
+}
+
+.verifyCodeBox{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.inputVerifyCode{
+    outline: none;
+    border: none;
+    border-radius: 12px;
+    width: 56px;
+    height: 64px;
+    box-sizing: border-box;
+    padding: 13px 16px;
+    background-color: #f4f4f4;
+    color: #212121;
+    font-size: 24px;
+    font-weight: 500;
+}
+.verifyBtn{
+    margin: 56px 0 24px;
+}
+.sendAgain{
+    font-size: 14px;
+    font-weight: 500;
+}
