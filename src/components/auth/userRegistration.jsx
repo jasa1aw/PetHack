@@ -1,147 +1,188 @@
 'use client'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faSquareCheck} from "@fortawesome/free-solid-svg-icons";
-import Link from "next/link"
-import { useEffect, useRef, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import {faSquareCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
+import axios from 'axios';
+import { useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
-import {LogIn, authorize } from '@/app/store/slices/authSlice';
-// import { useForm, Controller } from 'react-hook-form';
-// import * as yup from 'yup';
-// import { yupResolver } from '@hookform/resolvers/yup'
-// const schema = yup.object().shape({
-//     password: yup
-//         .string()
-//         .min(8, 'Пароль должен содержать минимум 8 символов')
-//         .max(15, 'Пароль должен содержать максимум 15 символов')
-//         .matches(/[a-z]/, 'Пароль должен содержать строчные буквы')
-//         .matches(/[A-Z]/, 'Пароль должен содержать прописные буквы')
-//         .matches(/[0-9]/, 'Пароль должен содержать минимум 1 цифру')
-//         .matches(/[!@#$%^&*(),.?":{}|<>]/, 'Пароль должен содержать минимум 1 спецсимвол'),
-//     });
+import {SignUp} from '@/app/store/slices/authSlice';
 
 export default function UserRegistration() {
-    const box1 = useRef()
-    const box2 = useRef()
-    const box3 = useRef()
-    const box4 = useRef()
-
+    const upperLowerCase = (str) =>{
+        return /[a-z]/.test(str) && /[A-Z]/.test(str)
+    }
+    const digitCheck = (str) => {
+        return /\d/.test(str)
+    }
+    const specialSymbolCheck = (str) => {
+        return /[!@#$%^*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(str)
+    }
 
     
-
-    // const { register, handleSubmit, errors, watch } = useForm({
-    //     resolver: yupResolver(schema),
-    // });
-    // const [requirementsColor, setRequirementsColor] = useState('gray');
-    
-    // const handlePasswordChange = () => {
-    //     const password = watch('password');
-    //     if (schema.isValidSync({ password })) {
-    //         setRequirementsColor('green');
-    //     } else {
-    //         setRequirementsColor('red');
-    //     }
-    // };
-    
-    // const isAuth = useSelector((state) => state.auth.isAuth)
     const router = useRouter()
     const dispatch = useDispatch()
+
     const [email, setEmail] = useState('');
-    const [login, setLogin] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [rePassword, setRePassword] = useState('');
-    const [visible, setVisible] = useState(false);
-    const [step, setStep] = useState(1)
-    const [code, setCode] = useState({1:'', 2:'', 3:'', 4: ''});
-    const changeHandler = (e) => {
-        setCode({[e.target.name]:e.target.value})
-    }
-    useEffect(() => {
-        
-    }, [code])
-    return(
-        <section className="registrationPage">
-            <div className="backBtn">
-                <div className="backIcon">
-                    <img src="/img/chevronLeft.svg" alt="Not Found" />
-                </div>
-                <p>Назад</p>
-            </div>
-        {step == 1 && 
-            <section className="login-page2">
-                <div className="rightSection">
-                    <div className="logo">
-                        <img src="/img/Illustration.svg" alt="Not Found" className="img" />
-                    </div>
-                    <h1 className="h1">Lorby</h1>
-                    <h3 className="h3">Твой личный репетитор</h3>
-                </div>
-                <div className="leftSection">
-                    <h2 className="h2">Создать аккаунт <br /> Lorby</h2>
-                    <input type="text" className="input" placeholder="Введите адрес почты" value={email} onChange={(e) => setEmail(e.target.value)}/>
-                    <input type="text" className="input" placeholder="Придумай логин" value={login} onChange={(e) => setLogin(e.target.value)}/>
-                    {/* <form onSubmit={handleSubmit(() => {})}>
-                        <div className="inputBoxPassword">
-                        <input type="password" name="password" onChange={handlePasswordChange} ref={register} className="inputPassword" placeholder="Пароль"
-                        />
-                        <div className="checkPassword" onClick={() => setVisible(!visible)}>
-                            {visible ? (<img src="/img/eyeOpen.svg" alt="Not Found" className="img" />) : (<img src="/img/eye.svg" alt="Not Found" className="img" />)}
-                        </div>
-                        </div>
-                        {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
-                    </form>
-                    <div style={{ color: requirementsColor }}>
-                        <p>&#8226; От 8 до 15 символов</p>
-                        <p>&#8226; Строчные и прописные буквы</p>
-                        <p>&#8226; Минимум 1 цифра</p>
-                        <p>&#8226; Минимум 1 спецсимвол (!, #, $...)</p>
-                    </div> */}
+    const [verificationStatus, setVerificationStatus] = useState(null);
 
-                    <div className="inputBoxPassword">
-                        <input type={visible ? 'text' : 'password'} className="inputPassword" placeholder="Создай пароль" value={password} onChange={(e) => setPassword(e.target.value)}/>
-                        <div className="checkPassword" onClick={() => setVisible(!visible)}>
-                            {visible ? <img src="/img/eyeOpen.svg" alt="Not Found" className="img"/> : <img src="/img/eye.svg" alt="Not Found" className="img" /> }
-                        </div>
-                    </div>
-                    <ul type="disc">
-                        <li>От 8 до 15 символов</li>
-                        <li>Строчные и прописные буквы</li>
-                        <li>Минимум 1 цифра</li>
-                        <li>Минимум 1 спецсимвол (!, #, $...)</li>
-                    </ul>
-                    <div className="inputBoxPassword">
-                        <input type={visible ? 'text' : 'password'} className="inputPassword" placeholder="Повтори пароль" value={rePassword} onChange={(e) => setRePassword(e.target.value)}/>
-                        <div className="checkPassword" onClick={() => setVisible(!visible)}>
-                            {visible ? <img src="/img/eyeOpen.svg" alt="Not Found" className="img"/> : <img src="/img/eye.svg" alt="Not Found" className="img" /> }
-                        </div>
-                    </div>
-                    <button className="button" >Далее</button>
-                </div>
-            </section>
+    const [visible, setVisible] = useState(false);
+    const [visible2, setVisible2] = useState(false);
+    const [step, setStep] = useState(1)
+
+    const [codes, setCodes] = useState(['', '', '', '']);
+    const inputRefs = [useRef(), useRef(), useRef(), useRef()];
+
+    const handleChange = (index, e) => {
+        const { value } = e.target;
+        setCodes(prevCodes => {
+        const newCodes = [...prevCodes];
+        newCodes[index] = value;
+        return newCodes;
+        });
+        if (value && index < inputRefs.length - 1) {
+        inputRefs[index + 1].current.focus();
         }
-        {step == 2 && 
-            <section className="login-page2">
-                <div className="rightSection">
-                    <div className="logo">
-                        <img src="/img/Illustration.svg" alt="Not Found" className="img" />
+    };
+    const handleKeyDown = (index, e) => {
+        if (e.key === 'Backspace' && index > 0 && !codes[index]) {
+            inputRefs[index - 1].current.focus();
+        }
+    };
+    const handleSubmit = async () => {
+        const code = codes.join('');
+        try {
+            const res = await axios.post('https://www.challenge-neobook.org/lorby/authentication/email-confirm/', { code });
+            if (res.status === 200) {
+                setVerificationStatus('success');
+                dispatch(authorize(email, username, password, rePassword))
+                router.push('/home')
+            } else {
+                setVerificationStatus('error');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            setVerificationStatus('error');
+        }
+    };
+    const regBtn = () => {
+        if(email.length > 0 && password.length > 0){
+            console.log('work');
+            dispatch(SignUp(email, username, password, rePassword));
+            setStep(2)
+        }
+    }
+    const reSendCode = async () => {
+        try {
+            const res = await axios.post(`https://www.challenge-neobook.org/lorby/authentication/resend-confirmation-code/${ email }`);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+    
+    return(
+        <>
+            {step == 1 && 
+                <section className="registrationPage">
+                    <div className="backBtn">
+                        <div className="backIcon" onClick={() => router.push('/login')}>
+                            <img src="/img/chevronLeft.svg" alt="Not Found" />
+                        </div>
+                        <p>Назад</p>
                     </div>
-                    <h1 className="h1">Lorby</h1>
-                    <h3 className="h3">Твой личный репетитор</h3>
-                </div>
-                <div className="leftSection">
-                    <h2 className="h2">Введи 4-значный код, <br/> высланный на <br/> {email}</h2>
-                    <div className="verifyCodeBox">
-                        <input type="text" className="inputVerifyCode" maxlength="1" ref={box1} name="1" onChange={changeHandler}/>
-                        <input type="text" className="inputVerifyCode" maxlength="1" ref={box2} name="2" onChange={changeHandler}/>
-                        <input type="text" className="inputVerifyCode" maxlength="1" ref={box3} name="3" onChange={changeHandler}/>
-                        <input type="text" className="inputVerifyCode" maxlength="1" ref={box4} name="4" onChange={changeHandler}/>
+                    <section className="login-page2">
+                        <div className="rightSection">
+                            <div className="logo">
+                                <img src="/img/Illustration.svg" alt="Not Found" className="img" />
+                            </div>
+                            <h1 className="h1">Lorby</h1>
+                            <h3 className="h3">Твой личный репетитор</h3>
+                        </div>
+                        <div className="leftSection">
+                            <h2 className="h2">Создать аккаунт <br /> Lorby</h2>
+                            <input type="text" className="input" placeholder="Введите адрес почты" value={email} onChange={(e) => setEmail(e.target.value)}/>
+                            <input type="text" className="input" placeholder="Придумай логин" value={username} onChange={(e) => setUsername(e.target.value)}/>
+                            <div className="inputBoxPassword">
+                                <input type={visible ? 'text' : 'password'} className="inputPassword" placeholder="Создай пароль" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                                <div className="checkPassword" onClick={() => setVisible(!visible)}>
+                                    {visible ? <img src="/img/eyeOpen.svg" alt="Not Found" className="img"/> : <img src="/img/eye.svg" alt="Not Found" className="img" /> }
+                                </div>
+                            </div>
+                            <ul>
+                                <li style={{color: password.length === 0 ? "#767676" : (password.length > 8 && password.length < 15 ? "#1BA228" : "#EC0000")}}>
+                                    От 8 до 15 символов
+                                    {password.length === 0 ? "" : (password.length > 8 && password.length < 15 ?  <FontAwesomeIcon icon={faSquareCheck} style={{color: "#1BA228",}} /> 
+                                    : <FontAwesomeIcon icon={faXmark} style={{color: "#EC0000",}} />)}
+                                </li>
+                                <li style={{color: password.length === 0 ? "#767676" : (upperLowerCase(password) ? "#1BA228" : "#EC0000")}}>
+                                    Строчные и прописные буквы
+                                    {password.length === 0 ? "" : (upperLowerCase(password) ?  <FontAwesomeIcon icon={faSquareCheck} style={{color: "#1BA228",}} /> 
+                                    : <FontAwesomeIcon icon={faXmark} style={{color: "#EC0000",}} />)}
+                                </li>
+                                <li style={{color: password.length === 0 ? "#767676" : (digitCheck(password) ? "#1BA228" : "#EC0000")}}>
+                                    Минимум 1 цифра
+                                    {password.length === 0 ? "" : (digitCheck(password) ?  <FontAwesomeIcon icon={faSquareCheck} style={{color: "#1BA228",}} /> 
+                                    : <FontAwesomeIcon icon={faXmark} style={{color: "#EC0000",}} />)}
+                                </li>
+                                <li style={{color: password.length === 0 ? "#767676" : (specialSymbolCheck(password) ? "#1BA228" : "#EC0000")}}>
+                                    Минимум 1 спецсимвол (!, #, $...)
+                                    {password.length === 0 ? "" : (specialSymbolCheck(password) ?  <FontAwesomeIcon icon={faSquareCheck} style={{color: "#1BA228",}} /> 
+                                    : <FontAwesomeIcon icon={faXmark} style={{color: "#EC0000",}} />)}
+                                </li>
+                            </ul>
+                            <div className="inputBoxPassword">
+                                <input type={visible2 ? 'text' : 'password'} className="inputPassword" placeholder="Повтори пароль" value={rePassword} onChange={(e) => setRePassword(e.target.value)}/>
+                                <div className="checkPassword" onClick={() => setVisible2(!visible2)}>
+                                    {visible2 ? <img src="/img/eyeOpen.svg" alt="Not Found" className="img"/> : <img src="/img/eye.svg" alt="Not Found" className="img" /> }
+                                </div>
+                            </div>
+                            <button className="button" onClick={regBtn}>Далее</button>
+                        </div>
+                    </section>
+                </section>    
+            }
+            {step == 2 && 
+                <section className="registrationPage">
+                    <div className="backBtn">
+                        <div className="backIcon" onClick={() => setStep(1)}>
+                            <img src="/img/chevronLeft.svg" alt="Not Found" />
+                        </div>
+                        <p>Назад</p>
                     </div>
-                    <button className="button verifyBtn">Подтвердить</button>
-                    <p className="sendAgain">Выслать код повторно</p>
-                </div>
-            </section>
-        }  
-        </section>
+                    <section className="login-page2">
+                        <div className="rightSection">
+                            <div className="logo">
+                                <img src="/img/Illustration.svg" alt="Not Found" className="img" />
+                            </div>
+                            <h1 className="h1">Lorby</h1>
+                            <h3 className="h3">Твой личный репетитор</h3>
+                        </div>
+                        <div className="leftSection">
+                            <h2 className="h2">Введи 4-значный код, <br/> высланный на <br/> {email}</h2>
+                            <div className="verifyCodeBox">
+                                {codes.map((code, index) => (
+                                    <input
+                                        className="inputVerifyCode"
+                                        key={index}
+                                        ref={inputRefs[index]}
+                                        type="text"
+                                        maxLength="1"
+                                        value={code}
+                                        onChange={e => handleChange(index, e)}
+                                        onKeyDown={e => handleKeyDown(index, e)}
+                                        style={{ border: verificationStatus === 'error' ? '1px solid red' : '' }}
+                                    />
+                                ))}
+                            </div>
+                            <button className="button verifyBtn" onClick={handleSubmit}>Подтвердить</button>
+                            <p className="sendAgain" onClick={reSendCode}>Выслать код повторно</p>
+                        </div>
+                    </section>
+                </section>
+            }  
+        </>
     )
     
 }

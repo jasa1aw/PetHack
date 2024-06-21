@@ -19,9 +19,7 @@ if(token){
           currentUser:{
               id:decodedToken.id,
               email:decodedToken.email,
-              full_name:decodedToken.full_name,
               username:decodedToken.username,
-              phone:decodedToken.phone
           },
           tokenExt:decodedToken.exp
       }
@@ -42,9 +40,7 @@ export const authSlice = createSlice({
         state.currentUser = {
           id: decoded.id,
           email: decoded.email,
-          full_name:  decoded.full_name,
-          username: decoded.username,
-          phone: decoded.phone,
+          username: decoded.username
         }
         state.isAuth = true;
 
@@ -61,3 +57,27 @@ export const authSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {authorize, logOut} = authSlice.actions
+export const SignUp = (email, username, password, password_confirm) => (dispatch) => {
+  axios.post(`${END_POINT}/register/`, {
+    email,
+    username,
+    password,
+    password_confirm
+  })
+}
+
+export const checkVerifyCode = (code) => (dispatch) => {
+  axios.post(`${END_POINT}/email-confirm/`, {
+    code
+  })
+}
+
+export const LogIn = (email, password) => (dispatch) => {
+  axios.post(`${END_POINT}/login/`, {
+    email,
+    password
+  }).then(res => {
+    dispatch(authorize(res.data))
+  })
+}
+export default authSlice.reducer

@@ -1,7 +1,7 @@
 'use client'
 import { useState } from "react"
 import LogoutModal from "../modalWindow";
-export default function Main() {
+export default function Main({text}) {
     const [openModal, setOpenModal] = useState(false);
     const closeModal = () =>{
         setOpenModal(false)
@@ -9,7 +9,7 @@ export default function Main() {
     return(
         <section className="main">
             {openModal && <LogoutModal closeModal={closeModal}/>}
-            <h1>Добро пожаловать!</h1>
+            <h1>{text}!</h1>
             <h4>Lorby - твой личный репетитор</h4>
             <div className="logo">
                 <img src="/img/Illustration.svg" alt="Not Found" className="img" />
